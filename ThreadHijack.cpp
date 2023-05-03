@@ -23,7 +23,7 @@ int main(int argc, const char** argv)
 		return -1;
 	}
 	printf("process found %d\nHijacking %d\n", pid, tid);
-	HijackInjection(pid, "C:\\Dev\\HijackTargets\\Debug\\HijackTargets.dll");
+	HijackInjection(pid, argv[2]);
 
 }
 bool HijackInjection(DWORD pid, const char* dll) {
@@ -50,7 +50,7 @@ bool HijackInjection(DWORD pid, const char* dll) {
 	if (!allocatedName)
 		return false;
 	WriteProcessMemory(hProcess, allocatedName, dll, strlen(dll), 0);
-	*(DWORD*)(shellcode + 0x2) = (DWORD)LoadLibraryA;
+	*(DWORD*)(shellcode + 0x2) = (DWORD)LoadLibraryA; 
 	*(DWORD*)(shellcode + 0x7) = (DWORD)allocatedName;
 	*(DWORD*)(shellcode + 0xF) = (DWORD)returnAddress;
 	void* allocatedShellcode = VirtualAllocEx(hProcess, 0, 20, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
